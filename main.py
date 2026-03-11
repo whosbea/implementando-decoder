@@ -13,6 +13,10 @@ from config import (
 )
 from math_utils import softmax
 from masking import create_causal_mask
+from cross_attention import (
+    initialize_cross_attention_weights,
+    cross_attention,
+)
 
 
 def main():
@@ -46,5 +50,34 @@ def main():
     print("\nSoma das linhas:")
     print(np.sum(attention_probs, axis=-1))
 
+    print("\n=== TAREFA 2: CROSS-ATTENTION ===")
+
+    encoder_output = np.random.randn(BATCH_SIZE, ENCODER_SEQ_LEN, D_MODEL)
+    decoder_state = np.random.randn(BATCH_SIZE, DECODER_SEQ_LEN, D_MODEL)
+
+    print("\nShape do encoder_output:", encoder_output.shape)
+    print("Shape do decoder_state:", decoder_state.shape)
+
+    w_q, w_k, w_v = initialize_cross_attention_weights(D_MODEL, D_K)
+
+    cross_output, cross_debug = cross_attention(
+        encoder_output=encoder_output,
+        decoder_state=decoder_state,
+        w_q=w_q,
+        w_k=w_k,
+        w_v=w_v,
+    )
+
+    print("\nShape de Q:", cross_debug["q"].shape)
+    print("Shape de K:", cross_debug["k"].shape)
+    print("Shape de V:", cross_debug["v"].shape)
+    print("Shape dos scores:", cross_debug["scores"].shape)
+    print("Shape dos scaled_scores:", cross_debug["scaled_scores"].shape)
+    print("Shape dos attention_weights:", cross_debug["attention_weights"].shape)
+    print("Shape da saída final:", cross_output.shape)
+
+    print("\nSoma das linhas dos attention_weights:")
+    print(np.sum(cross_debug["attention_weights"], axis=-1))
+    
 if __name__ == "__main__":
     main()
