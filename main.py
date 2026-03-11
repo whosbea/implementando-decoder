@@ -18,6 +18,12 @@ from cross_attention import (
     cross_attention,
 )
 from inference import autoregressive_inference
+from visualization import (
+    plot_decoder_lab_pipeline,
+    plot_causal_mask_flow,
+    plot_cross_attention_flow,
+    plot_autoregressive_inference_flow,
+)
 
 
 def main():
@@ -119,6 +125,34 @@ def main():
         print(f"\nPasso {step}:")
         print(probs)
         print("Soma das probabilidades:", np.sum(probs))
+
+    print("\n=== VISUALIZAÇÕES DO DECODER ===")
+
+    plot_decoder_lab_pipeline(
+        output_dir="outputs",
+        filename="decoder_lab_pipeline.png",
+        show=True
+    )
+
+    plot_causal_mask_flow(
+        output_dir="outputs",
+        filename="causal_mask_flow.png",
+        show=True
+    )
+
+    plot_cross_attention_flow(
+        output_dir="outputs",
+        filename="cross_attention_flow.png",
+        show=True
+    )
+
+    plot_autoregressive_inference_flow(
+        output_dir="outputs",
+        filename="autoregressive_inference_flow.png",
+        show=True
+    )
+
+    print("Diagramas salvos em outputs/")        
 
 
 if __name__ == "__main__":
