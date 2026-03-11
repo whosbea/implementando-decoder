@@ -17,9 +17,25 @@ from cross_attention import (
     initialize_cross_attention_weights,
     cross_attention,
 )
+from inference import autoregressive_inference
 
 
 def main():
+    print("=== LABORATÓRIO 3: DECODER ===")
+    print(f"Seed: {SEED}")
+    print(f"D_MODEL: {D_MODEL}")
+    print(f"D_K: {D_K}")
+    print(f"VOCAB_SIZE: {VOCAB_SIZE}")
+    print(f"ENCODER_SEQ_LEN: {ENCODER_SEQ_LEN}")
+    print(f"DECODER_SEQ_LEN: {DECODER_SEQ_LEN}")
+    print(f"BATCH_SIZE: {BATCH_SIZE}")
+
+    print("\nVocabulário:")
+    for token, idx in VOCAB.items():
+        print(f"{token}: {idx}")
+
+    print("\nTeste inicial concluído.")
+
     print("\n=== TAREFA 1: MÁSCARA CAUSAL ===")
 
     seq_len = 4
@@ -28,7 +44,6 @@ def main():
     print("\nMáscara causal:")
     print(mask)
 
-    # Scores fictícios para teste
     scores = np.array([
         [1.0, 2.0, 3.0, 4.0],
         [1.5, 2.5, 3.5, 4.5],
@@ -78,6 +93,33 @@ def main():
 
     print("\nSoma das linhas dos attention_weights:")
     print(np.sum(cross_debug["attention_weights"], axis=-1))
-    
+
+    print("\n=== TAREFA 3: INFERÊNCIA AUTO-REGRESSIVA ===")
+
+    bos_token_id = VOCAB["<BOS>"]
+    eos_token_id = VOCAB["<EOS>"]
+
+    generated_sequence, all_probs = autoregressive_inference(
+        encoder_output=encoder_output,
+        bos_token_id=bos_token_id,
+        eos_token_id=eos_token_id,
+        vocab_size=VOCAB_SIZE,
+        max_len=10
+    )
+
+    print("\nSequência gerada (IDs):")
+    print(generated_sequence)
+
+    generated_tokens = [ID_TO_TOKEN[token_id] for token_id in generated_sequence]
+    print("\nSequência gerada (tokens):")
+    print(generated_tokens)
+
+    print("\nDistribuições de probabilidade por passo:")
+    for step, probs in enumerate(all_probs):
+        print(f"\nPasso {step}:")
+        print(probs)
+        print("Soma das probabilidades:", np.sum(probs))
+
+
 if __name__ == "__main__":
     main()
