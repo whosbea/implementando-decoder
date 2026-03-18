@@ -370,3 +370,6 @@ Com isso, o projeto fornece uma base clara para entender o funcionamento interno
 
 VASWANI, Ashish et al. **Attention Is All You Need**. 2017.
 
+## Informações importantes
+Este projeto contou com apoio de IA (ChatGPT 5.4 Thinking) na geração e organização do código. Todo o conteúdo foi revisado, ajustado e estudado por Beatriz Barreto.
+
